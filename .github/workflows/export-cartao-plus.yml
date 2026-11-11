@@ -1,0 +1,24 @@
+name: Export Cartao Plus source ZIP
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/export-cartao-plus.yml
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact project revision
+        uses: actions/checkout@v4
+      - name: Create complete source archive
+        run: git archive --format=zip --prefix=Cartao-Plus/ HEAD -- . ':(exclude).github/workflows/export-cartao-plus.yml' -o Cartao-Plus-completo.zip
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cartao-plus-source
+          path: Cartao-Plus-completo.zip
+          if-no-files-found: error
+          retention-days: 1
