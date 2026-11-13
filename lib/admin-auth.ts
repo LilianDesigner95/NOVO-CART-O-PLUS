@@ -1,7 +1,7 @@
 import {env} from 'cloudflare:workers';
 import {cookies} from 'next/headers';
 const sha256=async(value:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('');
-import {randomToken} from './holder-auth';
+const randomToken=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
 export const ADMIN_EMAIL='liriosdesigner071@gmail.com';
 const COOKIE='cp_admin_session';
 export async function adminSession(){try{const token=(await cookies()).get(COOKIE)?.value;if(!token||!/^[a-f0-9]{64}$/.test(token))return null;const row=await env.DB!.prepare('SELECT a.email FROM admin_sessions s JOIN admin_accounts a ON a.email=s.email WHERE s.token_hash=? AND s.expires_at>?').bind(await sha256(token),new Date().toISOString()).first<{email:string}>();return row?.email===ADMIN_EMAIL?row.email:null}catch{return null}}
