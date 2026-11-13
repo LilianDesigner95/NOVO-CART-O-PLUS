@@ -10,7 +10,7 @@ const operationSchema=z.object({
  transactionId:z.string().optional(),
  at:z.string().optional(),
  state:stateShape.optional(),
- invoice:z.object({id:z.string().min(1),month:z.string().regex(/^\\d{4}-(0[1-9]|1[0-2])$/),transactions:z.array(z.unknown()).max(20000),officialCents:z.number().int().safe(),carryCents:z.number().int().safe()}).passthrough().optional(),
+ invoice:z.object({id:z.string().min(1),month:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),transactions:z.array(z.unknown()).max(20000),officialCents:z.number().int().safe(),carryCents:z.number().int().safe()}).passthrough().optional(),
 }).passthrough().superRefine((op,ctx)=>{
  if(op.type==='restore'&&!op.state)ctx.addIssue({code:'custom',message:'Backup inválido.',path:['state']});
  if(op.type==='import'&&!op.invoice)ctx.addIssue({code:'custom',message:'Fatura inválida.',path:['invoice']});
