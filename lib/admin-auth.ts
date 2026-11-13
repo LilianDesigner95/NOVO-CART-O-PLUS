@@ -1,6 +1,6 @@
 import {env} from 'cloudflare:workers';
 import {cookies} from 'next/headers';
-import {sha256} from './holder-portal';
+const sha256=async(value:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('');
 import {randomToken} from './holder-auth';
 export const ADMIN_EMAIL='liriosdesigner071@gmail.com';
 const COOKIE='cp_admin_session';
