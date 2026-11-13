@@ -32,7 +32,8 @@ async function verifiedAccessEmail(jwt: string): Promise<string | null> {
     if (!jwk) return null;
     const key = await crypto.subtle.importKey("jwk", jwk, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
     const signed = new TextEncoder().encode(`${parts[0]}.${parts[1]}`);
-    const valid = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, decodeBase64Url(parts[2]), signed);
+    const signature = Uint8Array.from(decodeBase64Url(parts[2])).buffer;
+    const valid = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, signature, signed);
     if (!valid) return null;
     const claims = JSON.parse(new TextDecoder().decode(decodeBase64Url(parts[1]))) as {
       iss?: string; aud?: string | string[]; exp?: number; nbf?: number; email?: string;
