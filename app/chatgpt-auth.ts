@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import {adminSession} from "../lib/admin-auth";
 
 export type ChatGPTUser = {
   userId: string;
@@ -52,24 +53,24 @@ async function verifiedAccessEmail(jwt: string): Promise<string | null> {
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const requestHeaders = await headers();
   const token = requestHeaders.get("cf-access-jwt-assertion");
-  if (!token) return null;
+  if (!token) { const email=await adminSession();return email?{userId:email,email,displayName:"Lirios Designer",fullName:null}:null; }
   const email = await verifiedAccessEmail(token);
-  if (email !== ALLOWED_EMAIL) return null;
+  if (email !== ALLOWED_EMAIL) { const local=await adminSession();return local?{userId:local,email:local,displayName:"Lirios Designer",fullName:null}:null; }
   return { userId: email, email, displayName: "Lirios Designer", fullName: null };
 }
 
 export async function requireChatGPTUser(_returnTo: string): Promise<ChatGPTUser> {
   const user = await getChatGPTUser();
   if (user) return user;
-  redirect("/cdn-cgi/access/login");
+  redirect("/login");
 }
 
 export function chatGPTSignInPath(_returnTo: string): string {
-  return "/cdn-cgi/access/login";
+  return "/login";
 }
 
 export function chatGPTSignOutPath(_returnTo = "/"): string {
-  return "/cdn-cgi/access/logout";
+  return "/api/admin/auth";
 }
 
 // Portal access requires a Cloudflare Access identity with the same verified audience.
