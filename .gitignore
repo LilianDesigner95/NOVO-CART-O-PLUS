@@ -58,3 +58,6 @@ next-env.d.ts
 public/vendor/pdf.mjs
 public/vendor/pdf.worker.mjs
 *.tsbuildinfo
+
+# Owner-only financial seed; never commit real financial data.
+/scripts/owner-seed.local.json
