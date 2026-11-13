@@ -51,12 +51,8 @@ async function verifiedAccessEmail(jwt: string): Promise<string | null> {
 }
 
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
-  const requestHeaders = await headers();
-  const token = requestHeaders.get("cf-access-jwt-assertion");
-  if (!token) { const email=await adminSession();return email?{userId:email,email,displayName:"Lirios Designer",fullName:null}:null; }
-  const email = await verifiedAccessEmail(token);
-  if (email !== ALLOWED_EMAIL) { const local=await adminSession();return local?{userId:local,email:local,displayName:"Lirios Designer",fullName:null}:null; }
-  return { userId: email, email, displayName: "Lirios Designer", fullName: null };
+  const email = await adminSession();
+  return email ? {userId:email,email,displayName:"Lirios Designer",fullName:null} : null;
 }
 
 export async function requireChatGPTUser(_returnTo: string): Promise<ChatGPTUser> {
