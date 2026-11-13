@@ -11,7 +11,7 @@ const operationSchema=z.object({
  at:z.string().optional(),
  state:stateShape.optional(),
  people:z.array(z.object({id:z.string().min(1),name:z.string().min(1)}).passthrough()).max(10000).optional(),
- cards:z.array(z.object({id:z.string().min(1),name:z.string().min(1),last4:z.string().regex(/^\\d{4}$/),kind:z.enum(['physical','virtual']),ownerPersonId:z.string().optional()}).passthrough()).max(10000).optional(),
+ cards:z.array(z.object({id:z.string().min(1),name:z.string().min(1),last4:z.string().regex(/^\d{4}$/),kind:z.enum(['physical','virtual']),ownerPersonId:z.string().optional()}).passthrough()).max(10000).optional(),
  invoice:z.object({id:z.string().min(1),month:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),transactions:z.array(z.unknown()).max(20000),officialCents:z.number().int().safe(),carryCents:z.number().int().safe()}).passthrough().optional(),
 }).passthrough().superRefine((op,ctx)=>{
  if(op.type==='import-registrations'&&(!op.people||!op.cards))ctx.addIssue({code:'custom',message:'Cadastros inválidos.',path:['people']});
