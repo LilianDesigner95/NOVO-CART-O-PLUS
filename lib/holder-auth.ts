@@ -1,6 +1,6 @@
 import {env} from 'cloudflare:workers';
 import {sha256} from './holder-portal';
-const ITERATIONS=310000;
+const ITERATIONS=100000;
 const hex=(bytes:Uint8Array)=>Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
 const bytes=(value:string)=>new Uint8Array(value.match(/.{2}/g)?.map(x=>parseInt(x,16))||[]);
 export async function passwordHash(password:string,salt:string,iterations=ITERATIONS){const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);const result=await crypto.subtle.deriveBits({name:'PBKDF2',salt:bytes(salt),iterations,hash:'SHA-256'},key,256);return hex(new Uint8Array(result))}
