@@ -1,4 +1,4 @@
-import {holderSession,holderWorkspace,holderInvoices,portalResponse,portalError} from '../../../lib/holder-portal';
+import {holderWorkspace,holderInvoices,portalResponse,portalError} from '../../../lib/holder-portal';
 import {env} from 'cloudflare:workers';
 import {z} from 'zod';
 import {accountSession} from '../../../lib/holder-auth';
