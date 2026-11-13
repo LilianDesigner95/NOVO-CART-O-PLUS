@@ -5,8 +5,8 @@ import { readExecutionProfile } from "./scripts/execution-profile.mjs";
 import { sites } from "./build/sites-vite-plugin";
 import { connectorPreview } from "./build/connector-preview-plugin.mjs";
 
-const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
-  "00000000-0000-4000-8000-000000000000";
+const CARTAO_PLUS_DATABASE_ID =
+  "9d114b13-e4f1-4f32-8f4b-fe4e2553ec08";
 
 const { d1, r2 } = hostingConfig;
 
@@ -21,8 +21,8 @@ const localBindingConfig = {
     ? [
         {
           binding: d1,
-          database_name: "site-creator-d1",
-          database_id: SITE_CREATOR_PLACEHOLDER_DATABASE_ID,
+          database_name: "cartao-plus-db",
+          database_id: CARTAO_PLUS_DATABASE_ID,
         },
       ]
     : [],
