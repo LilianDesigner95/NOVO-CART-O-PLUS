@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS holder_invites (id TEXT PRIMARY KEY, owner TEXT NOT NULL, person_id TEXT NOT NULL, email TEXT NOT NULL, token_hash TEXT NOT NULL UNIQUE, expires_at TEXT NOT NULL, redeemed_at TEXT, revoked_at TEXT, created_at TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS holder_invites_owner ON holder_invites(owner,person_id);
+CREATE TABLE IF NOT EXISTS holder_requests (id TEXT PRIMARY KEY, owner TEXT NOT NULL, person_id TEXT NOT NULL, invoice_id TEXT NOT NULL, transaction_id TEXT NOT NULL, kind TEXT NOT NULL CHECK(kind IN ('dispute','correction','split')), message TEXT NOT NULL, proposed_shares TEXT, status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected')), created_at TEXT NOT NULL, reviewed_at TEXT);
+CREATE INDEX IF NOT EXISTS holder_requests_owner ON holder_requests(owner,status,created_at);

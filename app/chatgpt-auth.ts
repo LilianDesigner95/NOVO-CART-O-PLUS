@@ -71,3 +71,7 @@ export function chatGPTSignInPath(_returnTo: string): string {
 export function chatGPTSignOutPath(_returnTo = "/"): string {
   return "/cdn-cgi/access/logout";
 }
+
+// Portal access requires a Cloudflare Access identity with the same verified audience.
+// Admin-only restrictions remain enforced separately by getChatGPTUser().
+export async function getVerifiedAccessEmail():Promise<string|null>{const h=await headers();const jwt=h.get('cf-access-jwt-assertion');return jwt?verifiedAccessEmail(jwt):null}
