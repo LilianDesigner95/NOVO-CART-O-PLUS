@@ -3,7 +3,6 @@ import {z} from 'zod';
 import {getVerifiedAccessEmail} from '../../../chatgpt-auth';
 import {ADMIN_EMAIL,adminCookie,createAdminSession,revokeAdminSession} from '../../../../lib/admin-auth';
 import {passwordHash,randomSalt,safeEqual} from '../../../../lib/holder-auth';
-import {sha256} from '../../../../lib/holder-portal';
 export const dynamic='force-dynamic';
 const schema=z.object({action:z.enum(['setup','login','logout']),email:z.string().email().optional(),password:z.string().optional()});
 const reply=(data:unknown,status=200,token?:string)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','Referrer-Policy':'no-referrer',...(token!==undefined?{'Set-Cookie':adminCookie(token,token?86400:0)}:{})}});
