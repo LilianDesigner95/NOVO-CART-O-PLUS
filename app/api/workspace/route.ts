@@ -5,7 +5,7 @@ import {applyOperation,validateState} from '../../../lib/ledger.mjs';
 export const dynamic='force-dynamic';
 const stateShape=z.object({schema:z.literal(2),people:z.array(z.unknown()).max(10000),cards:z.array(z.unknown()).max(10000),invoices:z.array(z.unknown()).max(10000)}).passthrough();
 const operationSchema=z.object({
- type:z.enum(['link-refund','reconcile-refunds','close','reopen','allocate','process','person','card','link-card','restore','import','import-registrations','invoice-settings','payment','void-payment','review-alert','undo-edit']),
+ type:z.enum(['link-refund','reconcile-refunds','close','reopen','allocate','process','person','card','link-card','restore','import','import-registrations','associate-card-owners','invoice-settings','payment','void-payment','review-alert','undo-edit']),
  invoiceId:z.string().optional(),
  transactionId:z.string().optional(),
  at:z.string().optional(),
