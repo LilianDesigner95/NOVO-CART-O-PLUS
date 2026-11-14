@@ -11,7 +11,7 @@ const money=(c:number)=>new Intl.NumberFormat('pt-BR',{style:'currency',currency
 const monthLabel=(s:string)=>new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(s+'-01T12:00:00'));
 export default function ShareLinks(){
  const [state,setState]=useState<State|null>(null),[month,setMonth]=useState(''),[query,setQuery]=useState(''),[error,setError]=useState(''),[copied,setCopied]=useState('');
- useEffect(()=>{void fetch('/api/workspace',{cache:'no-store'}).then(async r=>{if(!r.ok)throw Error('Não foi possível carregar as faturas.');const data=await r.json();setState(data.state);setMonth(data.state.invoices?.[0]?.month||'')}).catch(e=>setError((e as Error).message))},[]);
+ useEffect(()=>{void fetch('/api/workspace',{cache:'no-store'}).then(async r=>{if(!r.ok)throw Error('Não foi possível carregar as faturas.');const data=await r.json() as {state:State};setState(data.state);setMonth(data.state.invoices?.[0]?.month||'')}).catch(e=>setError((e as Error).message))},[]);
  const invoice=state?.invoices.find(i=>i.month===month);
  const rows=useMemo(()=>state?.people.filter(p=>p.name.toLocaleLowerCase('pt-BR').includes(query.toLocaleLowerCase('pt-BR'))).map(p=>{const purchases=(invoice?.transactions||[]).filter(t=>(t.allocations||[]).some(a=>a.personId===p.id));return {...p,purchases:purchases.length,total:invoice?personStatement(invoice,p.id).total:0}})||[],[state,invoice,query]);
  const url=typeof window==='undefined'?'https://novo-cart-o-plus.liriosdesigner071.workers.dev/titular':window.location.origin+'/titular'+(month?'?fatura='+encodeURIComponent(month):'');
