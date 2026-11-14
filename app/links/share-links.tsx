@@ -2,6 +2,7 @@
 import {useEffect,useMemo,useState} from 'react';
 import {ArrowLeft,Check,Copy,ExternalLink,Link2,MessageCircle,Search,ShieldCheck,Users} from 'lucide-react';
 import './style.css';
+import {personStatement} from '../../lib/person-summary.mjs';
 type Person={id:string;name:string};
 type Tx={id:string;name:string;amountCents:number;allocations?:{personId:string;amountCents:number}[]};
 type Invoice={id:string;month:string;transactions:Tx[]};
@@ -12,7 +13,7 @@ export default function ShareLinks(){
  const [state,setState]=useState<State|null>(null),[month,setMonth]=useState(''),[query,setQuery]=useState(''),[error,setError]=useState(''),[copied,setCopied]=useState('');
  useEffect(()=>{void fetch('/api/workspace',{cache:'no-store'}).then(async r=>{if(!r.ok)throw Error('Não foi possível carregar as faturas.');const data=await r.json();setState(data.state);setMonth(data.state.invoices?.[0]?.month||'')}).catch(e=>setError((e as Error).message))},[]);
  const invoice=state?.invoices.find(i=>i.month===month);
- const rows=useMemo(()=>state?.people.filter(p=>p.name.toLocaleLowerCase('pt-BR').includes(query.toLocaleLowerCase('pt-BR'))).map(p=>{const purchases=(invoice?.transactions||[]).filter(t=>(t.allocations||[]).some(a=>a.personId===p.id));return {...p,purchases:purchases.length,total:purchases.reduce((n,t)=>n+(t.allocations||[]).filter(a=>a.personId===p.id).reduce((v,a)=>v+a.amountCents,0),0)}})||[],[state,invoice,query]);
+ const rows=useMemo(()=>state?.people.filter(p=>p.name.toLocaleLowerCase('pt-BR').includes(query.toLocaleLowerCase('pt-BR'))).map(p=>{const purchases=(invoice?.transactions||[]).filter(t=>(t.allocations||[]).some(a=>a.personId===p.id));return {...p,purchases:purchases.length,total:invoice?personStatement(invoice,p.id).total:0}})||[],[state,invoice,query]);
  const url=typeof window==='undefined'?'https://novo-cart-o-plus.liriosdesigner071.workers.dev/titular':window.location.origin+'/titular'+(month?'?fatura='+encodeURIComponent(month):'');
  const message=(name:string,total:number)=>'Olá, '+name+'! Sua fatura de '+(month?monthLabel(month):'este mês')+' no Cartão Plus está em '+money(total)+'. Confira o detalhamento das suas compras e parcelas pelo portal seguro: '+url+'\nEntre com seu e-mail e senha. Se ainda não tem acesso, solicite seu convite.';
  async function copy(value:string,id:string){try{await navigator.clipboard.writeText(value);setCopied(id);setTimeout(()=>setCopied(''),2000)}catch{setError('Não foi possível copiar. Selecione o link e copie manualmente.')}}
