@@ -43,3 +43,6 @@ body{background:#f5f3f8}.sidebar{background:#251439}.sidebar nav button.active{b
 html{overflow-y:auto;scrollbar-gutter:stable}
 body{overflow-y:visible}
 .review-table-scroll,.statement-scroll{overscroll-behavior-y:auto}
+
+.person-review-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.person-review-actions .secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:8px 12px;font-size:12px;white-space:nowrap}
+@media(max-width:650px){.person-review-actions{align-items:stretch}.person-review-actions .secondary{width:100%;min-height:44px}}
