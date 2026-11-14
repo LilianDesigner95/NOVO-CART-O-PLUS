@@ -1,5 +1,5 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import PwaRegister from './pwa-register';
-export const metadata:Metadata={title:'Cartão Plus — Sua fatura, conferida',description:'Organize pessoas, cartões, parcelas e estornos com conferência de cada centavo.',manifest:'/manifest.webmanifest',icons:{icon:'/favicon.svg'},appleWebApp:{capable:true,title:'Cartão Plus',statusBarStyle:'default'}};
+export const metadata:Metadata={metadataBase:new URL('https://novo-cart-o-plus.liriosdesigner071.workers.dev'),title:'Cartão Plus — Sua fatura, conferida',description:'Consulte suas compras e confira os valores da sua fatura com segurança.',openGraph:{type:'website',locale:'pt_BR',siteName:'Cartão Plus',title:'Cartão Plus | Consulte sua fatura',description:'Acompanhe suas compras, parcelas e valores no Portal do Titular.',url:'/',images:[{url:'/icon-512.png',width:512,height:512,alt:'Cartão Plus'}]},twitter:{card:'summary_large_image',title:'Cartão Plus | Portal de Faturas',description:'Confira suas compras e valores com segurança.',images:['/icon-512.png']},manifest:'/manifest.webmanifest',icons:{icon:'/favicon.svg'},appleWebApp:{capable:true,title:'Cartão Plus',statusBarStyle:'default'}};
 export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="pt-BR"><body><PwaRegister />{children}</body></html>}
